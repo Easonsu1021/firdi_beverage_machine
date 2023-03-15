@@ -21,40 +21,46 @@ time = 50 #單一使用時間
 
 #main
 p "Enter mode:"
-mode = gets.to_i
+while true
+    mode = gets.to_i
 
-if (mode == 2)
-    #空壓桶槽
-    cl.with_slave(1).write_single_coil(2120,1)
+    if (mode == 2)
+        #空壓桶槽
+        cl.with_slave(1).write_single_coil(2120,1)
 
-    #卡匣固定
-    cl.with_slave(1).write_single_coil(2144,1) #第四個
-    
-    #使用裝置
-    cl.with_slave(1).write_single_coil(2814,1)
+        #卡匣固定
+        cl.with_slave(1).write_single_coil(2144,1) #第四個
+        
+        #使用裝置
+        cl.with_slave(1).write_single_coil(2814,1)
 
-    #單一增壓
-    cl.with_slave(1).write_single_coil(2134,1) #第四個
+        #單一增壓
+        cl.with_slave(1).write_single_coil(2134,1) #第四個
 
-    #輸入時間
-    cl.with_slave(1).write_single_register(6104,time)
-    
-    #啟動
-    cl.with_slave(1).write_single_coil(2000,1) 
-    
-    puts 'active' 
+        #輸入時間
+        cl.with_slave(1).write_single_register(6104,time)
+        
+        #啟動
+        cl.with_slave(1).write_single_coil(2000,1) 
+        
+        puts 'active' 
 
-else
-    #reset
-    cl.with_slave(1).write_single_coil(2120,0)
-    cl.with_slave(1).write_single_coil(2144,0)
-    cl.with_slave(1).write_single_coil(2814,1)
-    cl.with_slave(1).write_single_coil(2134,0)
-    cl.with_slave(1).write_single_register(6104,0)
-    puts 'reset'
+    elsif(mode == 3)
+        #停止
+        cl.with_slave(1).write_single_coil(2000,0) 
+         puts 'stop'
+    else
+        #reset
+        cl.with_slave(1).write_single_coil(2120,0)
+        cl.with_slave(1).write_single_coil(2144,0)
+        cl.with_slave(1).write_single_coil(2814,1)
+        cl.with_slave(1).write_single_coil(2134,0)
+        cl.with_slave(1).write_single_register(6104,0)
+        puts 'reset'
+        break
 
+    end
 end
-
 # #全部增壓
 # pressure_mode = cl.with_slave(1).read_coils(2016,1)
 # #puts pressure_mode
